@@ -17,9 +17,9 @@ public class SsdpMessageTest {
 	@Test
 	public void testConstructor() {
 		SsdpMessage message = new SsdpMessage(SsdpMessageType.MSEARCH);
-		message.addHeader("Host", "239.255.255.250:1900");
-		message.addHeader("Man", "\"ssdp:discover\"");
-		message.addHeader("ST", "roku:ecp");
+		message.setHeader("Host", "239.255.255.250:1900");
+		message.setHeader("Man", "\"ssdp:discover\"");
+		message.setHeader("ST", "roku:ecp");
 		assertMessage(message);	
 	}
 
@@ -33,24 +33,24 @@ public class SsdpMessageTest {
 	public void testEquality() {
 		String commonHost = "239.255.255.250:1900";
 		SsdpMessage message1 = new SsdpMessage(SsdpMessageType.MSEARCH);
-		message1.addHeader("Host", commonHost);
+		message1.setHeader("Host", commonHost);
 		
 		SsdpMessage message2 = new SsdpMessage(SsdpMessageType.MSEARCH);
-		message2.addHeader("Host", commonHost);
+		message2.setHeader("Host", commonHost);
 		
 		assertEquals(message1.hashCode(), message2.hashCode());
 		assertTrue(message1.equals(message2));
 		assertTrue(message2.equals(message1));
 
 		SsdpMessage message3 = new SsdpMessage(SsdpMessageType.NOTIFY);
-		message3.addHeader("Host", commonHost);
+		message3.setHeader("Host", commonHost);
 
 		assertNotEquals(message1.hashCode(), message3.hashCode());
 		assertFalse(message1.equals(message3));
 		assertFalse(message3.equals(message1));
 		
 		SsdpMessage message4 = new SsdpMessage(SsdpMessageType.MSEARCH);
-		message4.addHeader("Host", "localhost:2000");
+		message4.setHeader("Host", "localhost:2000");
 	
 		assertNotEquals(message1.hashCode(), message4.hashCode());
 		assertFalse(message1.equals(message4));

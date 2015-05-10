@@ -9,34 +9,27 @@ import java.net.StandardProtocolFamily;
 import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 public class SsdpChannel implements Closeable, AutoCloseable {
-    private static final CharsetDecoder DECODER = Charset.forName( "us-ascii" ).newDecoder();
-	private static final String SSDP_MCAST_ADDRESS = "239.255.255.250";
-	private static final int SSDP_PORT = 1900;
+	private static final InetSocketAddress SSDP_MCAST_ADDRESS = new InetSocketAddress("239.255.255.250", 1900);
 	
-    private final InetSocketAddress multicastAddress;
     private final DatagramChannel unicastChannel;
     private final DatagramChannel multicastChannel;
-    private final Selector selector;
+    private final SsdpSelector selector;
 
     public SsdpChannel(NetworkInterface networkIf) throws IOException {
-        selector = Selector.open();
-        unicastChannel = createChannel(networkIf, new InetSocketAddress(networkIf.getInetAddresses().nextElement(), 0), selector);
-        multicastChannel = createChannel(networkIf, new InetSocketAddress(SSDP_PORT), selector);
-        multicastAddress = new InetSocketAddress(SSDP_MCAST_ADDRESS, SSDP_PORT);
+        this(networkIf, SsdpSelector.open(true));
     }
     
-    public void send(SsdpMessage message) throws IOException {
-    	send(message, multicastAddress);
+    public SsdpChannel(NetworkInterface networkIf, SsdpSelector selector) throws IOException {
+        this.selector = selector;
+        this.unicastChannel = createChannel(networkIf, new InetSocketAddress(networkIf.getInetAddresses().nextElement(), 0), selector);
+        this.multicastChannel = createChannel(networkIf, new InetSocketAddress(SSDP_MCAST_ADDRESS.getPort()), selector);
+    }
+
+	public void send(SsdpMessage message) throws IOException {
+    	send(message, SSDP_MCAST_ADDRESS);
     }
 
     public void send(SsdpMessage message, SocketAddress address) throws IOException {
@@ -45,47 +38,48 @@ public class SsdpChannel implements Closeable, AutoCloseable {
     }
     
     public List<SsdpPacket> receive() throws IOException {
-    	if(selector.select() == 0) {
-    		return Collections.emptyList();
+    	if (!selector.isInternalSelector()) {
+    		throw new IllegalAccessError("use the ssdp selector receive method on the selector passed in");
     	}
-    	
-    	List<SsdpPacket> packets = new ArrayList<>();
-		Iterator<SelectionKey> keyIterator = selector.selectedKeys().iterator();
-		while (keyIterator.hasNext()) {
-			SelectionKey key = (SelectionKey) keyIterator.next();
-			packets.add(receive((DatagramChannel) key.channel(), (ByteBuffer) key.attachment()));
-			keyIterator.remove();
-		}
-		return packets;
+    	return selector.receive();
     }
 
-    private SsdpPacket receive(DatagramChannel channel, ByteBuffer buffer) throws IOException {
-        SocketAddress address = channel.receive(buffer);
-        SsdpMessage message = SsdpMessage.toMessage(DECODER.decode((ByteBuffer) buffer.flip()).toString());
-        return new SsdpPacket(message, address);
-        
-    }
     public void close() {
-    	if(selector.isOpen()) {
-    		selector.wakeup();
-    		try { selector.close(); } catch(IOException ignore) {}
-    	}
     	if(unicastChannel.isOpen()) {
+        	selector.unregister(unicastChannel);
     		try { unicastChannel.close(); } catch(IOException ignore) {}
     	}
     	if(multicastChannel.isOpen()) {
+        	selector.unregister(multicastChannel);
     		try { multicastChannel.close(); } catch(IOException ignore) {}
+    	}
+    	if (selector.isInternalSelector()) {
+    		try { selector.close(); } catch(IOException ignore) {}
     	}
     }
 
-    private DatagramChannel createChannel(NetworkInterface networkIf, InetSocketAddress address, Selector selector) throws IOException {
+    @Override
+    public String toString() {
+    	StringBuilder sb = new StringBuilder("SsdpChannel");
+    	try {
+			sb.append("[")
+				.append(unicastChannel.getOption(StandardSocketOptions.IP_MULTICAST_IF).toString())
+				.append("]");
+		} catch (IOException ignore) {
+			sb.append("[UnknownInterface]");
+		}
+    	
+    	return sb.toString();
+    }
+    
+    private DatagramChannel createChannel(NetworkInterface networkIf, InetSocketAddress address, SsdpSelector selector) throws IOException {
     	DatagramChannel channel = DatagramChannel.open(StandardProtocolFamily.INET)
                 .setOption(StandardSocketOptions.SO_REUSEADDR, true)
                 .bind(address)
                 .setOption(StandardSocketOptions.IP_MULTICAST_IF, networkIf);
-        channel.join(multicastAddress.getAddress(), networkIf);
+        channel.join(SSDP_MCAST_ADDRESS.getAddress(), networkIf);
         channel.configureBlocking(false);
-        channel.register(selector, SelectionKey.OP_READ, ByteBuffer.allocate(1024));
+        selector.register(this, channel);
         return channel;
-    }
+    }    
 }

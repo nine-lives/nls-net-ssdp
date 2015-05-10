@@ -19,7 +19,7 @@ public class SsdpMessage {
 	}
 	
 	public SsdpMessageType getType() {
-		return type;
+	    return type;
 	}
 	
 	public Map<String, String> getHeaders() {
@@ -30,8 +30,9 @@ public class SsdpMessage {
 		return headers.get(name);
 	}
 	
-	public void addHeader(String name, String value) {
+	public SsdpMessage setHeader(String name, String value) {
 		headers.put(name.toUpperCase(), value);
+		return this;
 	}
 	
 	public SsdpNotificationType getNotificationType() {
@@ -52,7 +53,7 @@ public class SsdpMessage {
 				throw new IllegalArgumentException(String.format("invalid header format, line=%s, header=%s", i, lines[i]));
 			}
 			
-			message.addHeader(lines[i].substring(0, index).trim(), lines[i].substring(index + 1).trim());
+			message.setHeader(lines[i].substring(0, index).trim(), lines[i].substring(index + 1).trim());
 		}
 		
 		return message;
