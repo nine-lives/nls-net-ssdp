@@ -28,6 +28,10 @@ public class SsdpChannel implements Closeable, AutoCloseable {
         this.multicastChannel = createChannel(networkIf, new InetSocketAddress(SSDP_MCAST_ADDRESS.getPort()), selector);
     }
 
+    public NetworkInterface getNetworkInterface() throws IOException {
+        return multicastChannel.getOption(StandardSocketOptions.IP_MULTICAST_IF);
+    }
+    
 	public void send(SsdpMessage message) throws IOException {
     	send(message, SSDP_MCAST_ADDRESS);
     }

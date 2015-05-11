@@ -32,17 +32,17 @@ public final class SsdpSelector implements Closeable, AutoCloseable {
 		return open(false);
 	}
 	
-	public static SsdpSelector open(boolean internal) throws IOException {
+	static SsdpSelector open(boolean internal) throws IOException {
 		return new SsdpSelector(internal);
 	}
 
-	Selector getSelector() {
-		return selector;
-	}
-	
 	@Override 
 	public void close() throws IOException {
 		selector.close();
+	}
+	
+	public boolean isOpen() {
+	    return selector.isOpen();
 	}
 	
     public List<SsdpPacket> receive() throws IOException {

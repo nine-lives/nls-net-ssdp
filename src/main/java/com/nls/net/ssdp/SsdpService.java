@@ -3,8 +3,9 @@ package com.nls.net.ssdp;
 import java.io.Closeable;
 import java.io.IOException;
 import java.net.NetworkInterface;
-import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -21,6 +22,10 @@ public class SsdpService implements Closeable, AutoCloseable {
 		this.thread = new Thread(new Receiver(), "SSDP Service");
 	}
 	
+    public List<SsdpChannel> getChannels() {
+        return channels;
+    }
+    
 	public void listen() throws IllegalStateException {
 		if (thread.isAlive() || thread.isInterrupted()) {
 			throw new IllegalStateException("the ssdp service is already running");
@@ -50,12 +55,25 @@ public class SsdpService implements Closeable, AutoCloseable {
 		return new SsdpService(interfaces, listener);
 	}
 
+    public static SsdpService forAllMulticastNetworkInterfaces(SsdpPacketListener listener) throws IOException {
+        List<NetworkInterface> interfaces = new ArrayList<NetworkInterface>();
+        
+        for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
+            NetworkInterface ni = en.nextElement();
+            if (ni.supportsMulticast()) {
+                interfaces.add(ni);
+            }
+        }
+        
+        return new SsdpService(interfaces, listener);
+    }
+	
 	private List<SsdpChannel> buildChannels(List<NetworkInterface> interfaces, SsdpSelector selector) throws IOException {
 		List<SsdpChannel> channels = new ArrayList<>(interfaces.size());
 		for (NetworkInterface networkIf : interfaces) {
 			channels.add(new SsdpChannel(networkIf, selector));
 		}
-		return channels;
+		return Collections.unmodifiableList(channels);
 	}
 	
 	private final class Receiver implements Runnable {
@@ -81,12 +99,17 @@ public class SsdpService implements Closeable, AutoCloseable {
 	}
 	
 	public static void main(String args[]) throws IOException, InterruptedException {
-		try (SsdpService service = SsdpService.forAllMulticastAvailableNetworkInterfaces(new MyHandler())) {
-			System.out.println("start");
+		try (SsdpService service = new SsdpService(Arrays.asList(NetworkInterface.getByName("net0")), new MyHandler())) {
 			service.listen();
-			System.out.println("listening");
-			Thread.sleep(30000);
-			System.out.println("wakeup");
+			while (true) {
+			    Thread.sleep(1000);
+			    try {
+    			    SsdpChannel channel = service.getChannels().get(0);
+    			    channel.send(new SsdpMessage(SsdpMessageType.RESPONSE));
+			    } catch(Exception e) {
+			        System.out.println(e.getMessage());
+			    }
+			}
 		}
 	}
 }

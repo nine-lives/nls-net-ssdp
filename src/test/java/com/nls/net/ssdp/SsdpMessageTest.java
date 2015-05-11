@@ -58,6 +58,12 @@ public class SsdpMessageTest {
 
 		assertFalse(message1.equals("a string"));
 	}
+
+	public void testNotificationTypeGetter() {
+        SsdpMessage message = new SsdpMessage(SsdpMessageType.NOTIFY);
+        message.setHeader("NTS", "ssdp:alive");
+        assertEquals(SsdpNotificationType.ALIVE, message.getNotificationType());
+	}
 	
 	private void assertMessage(SsdpMessage message) {
 		assertEquals(SsdpMessageType.MSEARCH, message.getType());
