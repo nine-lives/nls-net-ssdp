@@ -1,5 +1,6 @@
 *.class
 .classpath
+.gradle
 .project
 build/*
 *~
