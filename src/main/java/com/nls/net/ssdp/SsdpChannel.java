@@ -77,7 +77,7 @@ public class SsdpChannel implements Closeable, AutoCloseable {
     }
     
     private DatagramChannel createChannel(NetworkInterface networkIf, InetSocketAddress address, SsdpSelector selector) throws IOException {
-    	DatagramChannel channel = DatagramChannel.open(StandardProtocolFamily.INET)
+    	DatagramChannel channel = DatagramChannel.open(StandardProtocolFamily.INET6)
                 .setOption(StandardSocketOptions.SO_REUSEADDR, true)
                 .bind(address)
                 .setOption(StandardSocketOptions.IP_MULTICAST_IF, networkIf);
