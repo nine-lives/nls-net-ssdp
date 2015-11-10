@@ -25,13 +25,9 @@ public class SsdpChannel implements Closeable, AutoCloseable {
     }
 
     public SsdpChannel(NetworkInterface networkIf, SsdpSelector selector) throws IOException {
-        this(networkIf, selector, StandardProtocolFamily.INET);
-    }
-
-    public SsdpChannel(NetworkInterface networkIf, SsdpSelector selector, StandardProtocolFamily protocolFamily) throws IOException {
         this.selector = selector;
-        this.unicastChannel = createChannel(networkIf, new InetSocketAddress(networkIf.getInetAddresses().nextElement(), 0), selector, protocolFamily);
-        this.multicastChannel = createChannel(networkIf, new InetSocketAddress(SSDP_MCAST_ADDRESS.getPort()), selector, protocolFamily);
+        this.unicastChannel = createChannel(networkIf, new InetSocketAddress(networkIf.getInetAddresses().nextElement(), 0), selector);
+        this.multicastChannel = createChannel(networkIf, new InetSocketAddress(SSDP_MCAST_ADDRESS.getPort()), selector);
     }
 
     public NetworkInterface getNetworkInterface() throws IOException {
@@ -91,9 +87,9 @@ public class SsdpChannel implements Closeable, AutoCloseable {
         return sb.toString();
     }
 
-    private DatagramChannel createChannel(NetworkInterface networkIf, InetSocketAddress address, SsdpSelector selector, StandardProtocolFamily protocolFamily)
+    private DatagramChannel createChannel(NetworkInterface networkIf, InetSocketAddress address, SsdpSelector selector)
             throws IOException {
-        DatagramChannel channel = DatagramChannel.open(protocolFamily)
+        DatagramChannel channel = DatagramChannel.open(StandardProtocolFamily.INET)
                 .setOption(StandardSocketOptions.SO_REUSEADDR, true)
                 .bind(address)
                 .setOption(StandardSocketOptions.IP_MULTICAST_IF, networkIf);
