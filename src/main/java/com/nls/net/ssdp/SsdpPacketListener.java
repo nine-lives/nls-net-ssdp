@@ -8,5 +8,5 @@ package com.nls.net.ssdp;
  * @author marc.smith@9ls.com
  */
 public interface SsdpPacketListener {
-	void received(SsdpPacket packet);
+    void received(SsdpPacket packet);
 }

@@ -1,22 +1,19 @@
 package com.nls.net.ssdp;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
 import java.net.SocketAddress;
-import java.net.SocketException;
 
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 public class SsdpPacketTest {
-    
+
     @Test
-    public void testConstructorAndGetters() throws SocketException, IOException {
-        try(SsdpChannel channel = new SsdpChannel(NetworkInterface.getByName("lo"))) {
+    public void testConstructorAndGetters() throws IOException {
+        try (SsdpChannel channel = new SsdpChannel(NetworkInterface.getByName("lo"))) {
             SsdpMessage message = new SsdpMessage(SsdpMessageType.NOTIFY);
             SocketAddress address = new InetSocketAddress("127.0.0.1", 1234);
             SsdpPacket packet = new SsdpPacket(message, channel, address);
@@ -25,25 +22,25 @@ public class SsdpPacketTest {
             assertEquals(address, packet.getSocketAddress());
         }
     }
-    
+
     @Test
-    public void testEqualityAndHashCode() throws SocketException, IOException {
-        try(SsdpChannel channel = new SsdpChannel(NetworkInterface.getByName("lo"))) {
+    public void testEqualityAndHashCode() throws IOException {
+        try (SsdpChannel channel = new SsdpChannel(NetworkInterface.getByName("lo"))) {
             SsdpMessage message1 = new SsdpMessage(SsdpMessageType.NOTIFY);
             SsdpMessage message2 = new SsdpMessage(SsdpMessageType.MSEARCH);
             SocketAddress address1 = new InetSocketAddress("127.0.0.1", 1234);
             SocketAddress address2 = new InetSocketAddress("127.0.0.1", 4321);
-            
+
             SsdpPacket packet1 = new SsdpPacket(message1, channel, address1);
             SsdpPacket packet2 = new SsdpPacket(message1, channel, address1);
             SsdpPacket packet3 = new SsdpPacket(message2, channel, address1);
             SsdpPacket packet4 = new SsdpPacket(message1, channel, address2);
             SsdpPacket packet5 = new SsdpPacket(message1, null, address1);
-            
+
             assertEquals(packet1.hashCode(), packet2.hashCode());
             assertEquals(packet1, packet2);
             assertEquals(packet2, packet1);
-            
+
             assertNotEquals(packet1, packet3);
             assertNotEquals(packet1, packet4);
             assertNotEquals(packet1, packet5);
@@ -51,17 +48,17 @@ public class SsdpPacketTest {
     }
 
     @Test
-    public void testToString() throws SocketException, IOException {
-        try(SsdpChannel channel = new SsdpChannel(NetworkInterface.getByName("lo"))) {
+    public void testToString() throws IOException {
+        try (SsdpChannel channel = new SsdpChannel(NetworkInterface.getByName("lo"))) {
             SsdpMessage message = new SsdpMessage(SsdpMessageType.NOTIFY);
             SocketAddress address = new InetSocketAddress("127.0.0.1", 1234);
             SsdpPacket packet = new SsdpPacket(message, channel, address);
             assertTrue(packet.toString().matches(
-                    "SsdpPacket\\["
-                    + "messageType=NOTIFY, "
-                    + "address=.*, "
-                    + "channel=.*"
-                    + "\\]"));
+                    "SsdpPacket\\[" +
+                            "messageType=NOTIFY, " +
+                            "address=.*, " +
+                            "channel=.*" +
+                            "\\]"));
         }
     }
 }

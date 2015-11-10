@@ -1,0 +1,388 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.3//EN" "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+<module name="Checker">
+    <module name="SuppressionFilter">
+        <property name="file" value="config/checkstyle/checkstyle-suppressions.xml"/>
+    </module>
+    
+    <module name="SuppressionCommentFilter">
+        <property name="offCommentFormat" value="Generated code begins here"/>
+        <property name="onCommentFormat" value="Generated code ends here"/>
+    </module>
+    <module name="TreeWalker">
+        <property name="cacheFile" value="target/cachefile"/>
+        <property name="tabWidth" value="4"/>
+        <module name="FileContentsHolder"/>
+        <!-- Annotations -->
+        <module name="AnnotationLocation"/>
+        <module name="AnnotationUseStyle"/>
+        <module name="MissingDeprecated"/>
+        <module name="MissingOverride"/>
+        <module name="PackageAnnotation"/>
+        <module name="SuppressWarnings">
+            <property name="format" value="^((?!unchecked|rawtypes).)*$"/>
+        </module>
+        <!-- Blocks -->
+        <module name="EmptyBlock"/>
+        <module name="LeftCurly"/>
+        <module name="NeedBraces"/>
+        <module name="RightCurly"/>
+        <module name="AvoidNestedBlocks"/>
+        <!-- Class Design -->
+        <module name="VisibilityModifier"/>
+        <module name="FinalClass"/>
+        <module name="InterfaceIsType"/>
+        <module name="HideUtilityClassConstructor"/>
+        <module name="MutableException"/>
+        <module name="ThrowsCount">
+            <property name="max" value="3"/>
+        </module>
+        <module name="InnerTypeLast"/>
+        <module name="OneTopLevelClass"/>
+        <!-- Coding -->
+        <module name="CovariantEquals"/>
+        <module name="EmptyStatement"/>
+        <module name="EqualsAvoidNull"/>
+        <module name="EqualsHashCode"/>
+        <module name="IllegalInstantiation">
+            <property name="classes" value="java.lang.String"/>
+            <property name="classes" value="java.lang.Boolean"/>
+            <property name="classes" value="java.lang.Integer"/>
+            <property name="classes" value="java.lang.Long"/>
+            <property name="classes" value="java.util.Date"/>
+            <property name="classes" value="java.util.GregorianCalendar"/>
+            <property name="classes" value="java.util.StringTokenizer"/>
+            <property name="classes" value="java.util.Vector"/>
+            <property name="classes" value="java.util.Stack"/>
+            <property name="classes" value="java.util.Hashtable"/>
+            <property name="classes" value="com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl"/>
+        </module>
+        <module name="IllegalInstantiation">
+            <property name="classes" value="org.meanbean.test.BeanTester"/>
+            <property name="id" value="InstantiatingBeanTester_Error"/>
+        </module>
+        <module name="InnerAssignment"/>
+        <module name="MagicNumber">
+            <property name="ignoreHashCodeMethod" value="true"/>
+            <property name="severity" value="warning"/>
+        </module>
+        <module name="ModifiedControlVariable"/>
+        <module name="SimplifyBooleanExpression"/>
+        <module name="SimplifyBooleanReturn"/>
+        <module name="StringLiteralEquality"/>
+        <module name="NestedForDepth"/>
+        <module name="NestedIfDepth"/>
+        <module name="NestedTryDepth"/>
+        <module name="NoClone"/>
+        <module name="NoFinalizer"/>
+        <module name="PackageDeclaration"/>
+        <module name="IllegalType"/>
+        <module name="IllegalType">
+            <property name="illegalClassNames" value="java.util.Date"/>
+            <property name="illegalClassNames" value="java.sql.Timestamp"/>
+            <property name="illegalClassNames" value="java.sql.Date"/>
+            <property name="severity" value="warning"/>
+        </module>
+        <module name="IllegalType">
+            <property name="illegalClassNames" value="org.meanbean.test.BeanTester"/>
+            <property name="id" value="ReferencingBeanTester_Error"/>
+        </module>
+        <module name="IllegalType">
+            <property name="illegalClassNames" value="java.util.GregorianCalendar"/>
+            <property name="illegalClassNames" value="java.util.Hashtable"/>
+            <property name="illegalClassNames" value="java.util.HashSet"/>
+            <property name="illegalClassNames" value="java.util.HashMap"/>
+            <property name="illegalClassNames" value="java.util.ArrayList"/>
+            <property name="illegalClassNames" value="java.util.LinkedList"/>
+            <property name="illegalClassNames" value="java.util.LinkedHashMap"/>
+            <property name="illegalClassNames" value="java.util.LinkedHashSet"/>
+            <property name="illegalClassNames" value="java.util.TreeSet"/>
+            <property name="illegalClassNames" value="java.util.TreeMap"/>
+            <property name="illegalClassNames" value="java.util.Vector"/>
+            <property name="illegalClassNames" value="java.util.IdentityHashMap"/>
+            <property name="illegalClassNames" value="java.util.PriorityQueue"/>
+            <property name="illegalClassNames" value="java.util.concurrent.ConcurrentHashMap"/>
+            <property name="illegalClassNames" value="java.util.concurrent.ConcurrentLinkedDeque"/>
+            <property name="illegalClassNames" value="java.util.concurrent.ConcurrentLinkedQueue"/>
+            <property name="illegalClassNames" value="java.util.concurrent.ConcurrentSkipListMap"/>
+            <property name="illegalClassNames" value="java.util.concurrent.ConcurrentSkipListSet"/>
+            <property name="illegalClassNames" value="java.util.concurrent.CopyOnWriteArrayList"/>
+            <property name="illegalClassNames" value="java.util.concurrent.CopyOnWriteArraySet"/>
+            <property name="illegalClassNames" value="java.util.concurrent.DelayQueue"/>
+            <property name="illegalClassNames" value="java.util.concurrent.LinkedBlockingDeque"/>
+            <property name="illegalClassNames" value="java.util.concurrent.LinkedBlockingQueue"/>
+            <property name="illegalClassNames" value="java.util.concurrent.LinkedTransferQueue"/>
+            <property name="illegalClassNames" value="java.util.concurrent.PriorityBlockingQueue"/>
+        </module>
+        <module name="DeclarationOrder"/>
+        <module name="ParameterAssignment">
+            <property name="severity" value="warning"/>
+        </module>
+        <module name="ExplicitInitialization"/>
+        <module name="DefaultComesLast"/>
+        <module name="MultipleVariableDeclarations"/>
+        <module name="UnnecessaryParentheses"/>
+        <module name="OneStatementPerLine"/>
+        <!-- Imports -->
+        <module name="AvoidStarImport">
+            <property name="allowClassImports" value="false"/>
+            <property name="allowStaticMemberImports" value="true"/>
+            <property name="excludes" value="org.junit.Assert"/>
+            <property name="excludes" value="org.mockito"/>
+            <property name="excludes" value="org.mockito.Mockito"/>
+            <property name="excludes" value="org.hamcrest"/>
+            <property name="excludes" value="com.natpryce.makeiteasy.MakeItEasy"/>
+        </module>
+        <module name="AvoidStaticImport">
+            <property name="excludes" value="com.natpryce.makeiteasy.MakeItEasy.*"/>
+            <property name="excludes" value="com.google.common.base.Preconditions.*"/>
+            <property name="excludes" value="java.util.Objects.*"/>
+            <property name="excludes" value="org.hamcrest.*"/>
+            <property name="excludes" value="org.hamcrest.Matchers.*"/>
+            <property name="excludes" value="org.hamcrest.MatcherAssert.*"/>
+            <property name="excludes" value="org.hamcrest.number.OrderingComparison.*"/>
+            <property name="excludes" value="org.hamcrest.collection.IsIterableContainingInOrder.*"/>
+            <property name="excludes" value="org.hamcrest.core.Is.*"/>
+            <property name="excludes" value="org.hamcrest.core.IsEqual"/>
+            <property name="excludes" value="org.hamcrest.CoreMatchers.*"/>
+            <property name="excludes" value="org.junit.Assert.*"/>
+            <property name="excludes" value="org.mockito.*"/>
+            <property name="excludes" value="org.mockito.Mockito.*"/>
+            <property name="excludes" value="org.mockito.BDDMockito.*"/>
+            <property name="excludes" value="org.mockito.Matchers.*"/>
+            <property name="excludes" value="org.powermock.api.mockito.PowerMockito.*"/>
+        </module>
+        <module name="IllegalImport">
+            <property name="illegalPkgs" value="com.sun"/>
+            <property name="illegalPkgs" value="com.oracle"/>
+            <property name="illegalPkgs" value="java.applet"/>
+            <property name="illegalPkgs" value="java.awt"/>
+            <property name="illegalPkgs" value="javax.swing"/>
+            <property name="illegalPkgs" value="junit"/>
+            <property name="illegalPkgs" value="org.omg"/>
+            <property name="illegalPkgs" value="sun"/>
+            <property name="illegalPkgs" value="sunw"/>
+        </module>
+        <module name="RedundantImport"/>
+        <module name="UnusedImports"/>
+        <!-- Metrics -->
+        <module name="BooleanExpressionComplexity">
+            <property name="max" value="3"/>
+            <property name="severity" value="warning"/>
+        </module>
+        <module name="BooleanExpressionComplexity">
+            <property name="max" value="5"/>
+            <property name="id" value="BooleanExpressionComplexity_Error"/>
+        </module>
+        <module name="ClassDataAbstractionCoupling">
+            <property name="max" value="6"/>
+            <property name="severity" value="warning"/>
+        </module>
+        <module name="ClassDataAbstractionCoupling">
+            <property name="max" value="15"/>
+            <property name="id" value="ClassDataAbstractionCoupling_Error"/>
+        </module>
+        <module name="ClassFanOutComplexity">
+            <property name="max" value="25"/>
+            <property name="severity" value="warning"/>
+        </module>
+        <module name="ClassFanOutComplexity">
+            <property name="max" value="40"/>
+            <property name="id" value="ClassFanOutComplexity_Error"/>
+        </module>
+        <module name="CyclomaticComplexity">
+            <property name="max" value="10"/>
+            <property name="severity" value="warning"/>
+        </module>
+        <module name="CyclomaticComplexity">
+            <property name="max" value="18"/>
+            <property name="id" value="CyclomaticComplexity_Error"/>
+        </module>
+        <module name="NPathComplexity">
+            <property name="max" value="30"/>
+            <property name="severity" value="warning"/>
+        </module>
+        <module name="NPathComplexity">
+            <property name="max" value="300"/>
+            <property name="id" value="NPathComplexity_Error"/>
+        </module>
+        <!-- Miscellaneous -->
+        <module name="TodoComment">
+            <property name="severity" value="warning"/>
+        </module>
+        <module name="ArrayTypeStyle"/>
+        <module name="Indentation">
+            <property name="caseIndent" value="4"/>
+        </module>
+        <module name="OuterTypeFilename"/>
+        <!-- Modifiers -->
+        <module name="ModifierOrder"/>
+        <module name="RedundantModifier"/>
+        <!-- Naming Conventions -->
+        <module name="ClassTypeParameterName"/>
+        <module name="ConstantName"/>
+        <module name="LocalFinalVariableName"/>
+        <module name="LocalVariableName"/>
+        <module name="MemberName"/>
+        <module name="MethodName"/>
+        <module name="MethodTypeParameterName"/>
+        <module name="InterfaceTypeParameterName"/>
+        <module name="PackageName"/>
+        <module name="ParameterName"/>
+        <module name="StaticVariableName"/>
+        <module name="TypeName"/>
+        <!-- Size Violations -->
+        <module name="LineLength">
+            <property name="max" value="200"/>
+            <property name="severity" value="warning"/>
+        </module>
+        <module name="LineLength">
+            <property name="max" value="250"/>
+            <property name="id" value="LineLength_Error"/>
+        </module>
+        <module name="MethodLength">
+            <property name="max" value="25"/>
+            <property name="severity" value="warning"/>
+        </module>
+        <module name="MethodLength">
+            <property name="max" value="60"/>
+            <property name="id" value="MethodLength_Error"/>
+        </module>
+        <module name="AnonInnerLength">
+            <property name="max" value="40"/>
+            <property name="severity" value="warning"/>
+        </module>
+        <module name="AnonInnerLength">
+            <property name="max" value="80"/>
+            <property name="id" value="AnonInnerLength_Error"/>
+        </module>
+        <module name="ParameterNumber">
+            <property name="max" value="4"/>
+            <property name="tokens" value="METHOD_DEF"/>
+            <property name="id" value="Method_ParameterNumber_Warning"/>
+            <property name="severity" value="warning"/>
+        </module>
+        <module name="ParameterNumber">
+            <property name="max" value="6"/>
+            <property name="tokens" value="METHOD_DEF"/>
+            <property name="id" value="Method_ParameterNumber_Error"/>
+        </module>
+        <module name="ParameterNumber">
+            <property name="max" value="6"/>
+            <property name="tokens" value="CTOR_DEF"/>
+            <property name="id" value="Constructor_ParameterNumber_Warning"/>
+            <property name="severity" value="warning"/>
+        </module>
+        <module name="ParameterNumber">
+            <property name="max" value="8"/>
+            <property name="tokens" value="CTOR_DEF"/>
+            <property name="id" value="Constructor_ParameterNumber_Error"/>
+        </module>
+        <module name="OuterTypeNumber"/>
+        <module name="MethodCount">
+            <property name="maxPublic" value="20"/>
+            <property name="maxPrivate" value="60"/>
+            <property name="maxPackage" value="60"/>
+            <property name="maxProtected" value="10"/>
+            <property name="maxTotal" value="60"/>
+            <property name="severity" value="warning"/>
+        </module>
+        <module name="MethodCount">
+            <property name="maxPublic" value="25"/>
+            <property name="maxPrivate" value="100"/>
+            <property name="maxPackage" value="100"/>
+            <property name="maxProtected" value="20"/>
+            <property name="maxTotal" value="100"/>
+            <property name="id" value="MethodCount_Error"/>
+        </module>
+        <!-- Whitespace -->
+        <module name="GenericWhitespace"/>
+        <module name="EmptyForInitializerPad"/>
+        <module name="EmptyForIteratorPad"/>
+        <module name="MethodParamPad"/>
+        <module name="NoWhitespaceAfter"/>
+        <module name="NoWhitespaceBefore"/>
+        <module name="OperatorWrap">
+            <property name="id" value="OperatorWrapNl"/>
+            <property name="option" value="nl"/>
+            <property name="tokens" value="BAND, BOR, BSR, BXOR, COLON, DIV, EQUAL, GE, GT, LAND, LE, LITERAL_INSTANCEOF, LOR, LT, MINUS, MOD, NOT_EQUAL, QUESTION, SL, SR, STAR"/>
+        </module>
+        <module name="OperatorWrap">
+            <property name="id" value="OperatorWrapEol"/>
+            <property name="tokens" value="PLUS"/>
+            <property name="option" value="eol"/>
+        </module>
+        <module name="ParenPad"/>
+        <module name="TypecastParenPad"/>
+        <module name="WhitespaceAfter"/>
+        <module name="WhitespaceAround">
+            <property name="tokens" value="ASSIGN, BAND, BAND_ASSIGN, BOR, BOR_ASSIGN, BSR, BSR_ASSIGN, BXOR, BXOR_ASSIGN, COLON, DIV, DIV_ASSIGN, EQUAL, GE, GT, LAND, LCURLY, LE, LITERAL_ASSERT, LITERAL_CATCH, LITERAL_DO, LITERAL_ELSE, LITERAL_FINALLY, LITERAL_FOR, LITERAL_IF, LITERAL_RETURN, LITERAL_SYNCHRONIZED, LITERAL_TRY, LITERAL_WHILE, LOR, LT, MINUS, MINUS_ASSIGN, MOD, MOD_ASSIGN, NOT_EQUAL, PLUS, PLUS_ASSIGN, QUESTION, SL, SLIST, SL_ASSIGN, SR, SR_ASSIGN, STAR, STAR_ASSIGN, LITERAL_ASSERT, TYPE_EXTENSION_AND"/>
+        </module>
+        <module name="NoLineWrap"/>
+        <!-- Custom Rules -->
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="\.exit\(|\.halt\(|\.traceMethodCalls\(|\.traceInstructions\(|\.runFinalization\(|\.gc\("/>
+            <property name="message" value="Suspicious invocation of dangerous JVM level operation"/>
+            <property name="ignoreComments" value="true"/>
+            <property name="id" value="DangerousJVMOperation_Error"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="System\.currentTimeMillis\("/>
+            <property name="message" value="Illegal access to system time, use org.joda.time.DateTimeUtils.currentTimeMillis()"/>
+            <property name="ignoreComments" value="true"/>
+            <property name="id" value="DirectSystemTimeQuery_Error"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="long serialVersionUID"/>
+            <property name="message" value="Do not declare a serialVersionUID"/>
+            <property name="ignoreComments" value="true"/>
+            <property name="id" value="SerialVersionUIDDeclared_Error"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="\.printStackTrace\(\)|System\.out|System\.err|org\.apache\.commons\.logging\.Log|java\.util\.logging"/>
+            <property name="message" value="use SLF4J for logging"/>
+            <property name="ignoreComments" value="true"/>
+            <property name="id" value="InvalidLoggingMethod_Error"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="null !=|null =="/>
+            <property name="message" value="Check for null in reverse order"/>
+            <property name="ignoreComments" value="true"/>
+            <property name="id" value="ReverseOrderNullCheck_Error"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="@Ignore"/>
+            <property name="message" value="Ignored unit test, please remove the test or fix it"/>
+            <property name="ignoreComments" value="true"/>
+            <property name="id" value="IgnoredUnitTest_Error"/>
+            <property name="severity" value="error"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="assert "/>
+            <property name="message" value="Don't use java assertions, use java.util.Objects.requireNonNull() or com.google.common.base.Preconditions instead"/>
+            <property name="ignoreComments" value="true"/>
+            <property name="id" value="JavaAssertion_Error"/>
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="org\.springframework\.util\.Assert"/>
+            <property name="message" value="Don't use spring assertions, use java.util.Objects.requireNonNull() or com.google.common.base.Preconditions instead"/>
+            <property name="ignoreComments" value="true"/>
+            <property name="id" value="JavaAssertion_Error"/>
+        </module>
+    </module>
+    <module name="FileTabCharacter"/>
+    <module name="FileLength">
+        <property name="severity" value="warning"/>
+        <property name="max" value="300"/>
+    </module>
+    <module name="FileLength">
+        <property name="max" value="500"/>
+        <property name="id" value="FileLength_Error"/>
+    </module>
+    <!-- Custom Rules -->
+    <module name="RegexpSingleline">
+        <property name="format" value="\s+$"/>
+        <property name="message" value="Line has trailing spaces"/>
+        <property name="id" value="TrailingSpaces_Error"/>
+    </module>
+</module>

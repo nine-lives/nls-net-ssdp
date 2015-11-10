@@ -1,11 +1,11 @@
 package com.nls.net.ssdp;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 
 import java.io.IOException;
 
-import org.junit.Test;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class SsdpSelectorTest {
 
@@ -18,10 +18,10 @@ public class SsdpSelectorTest {
             assertTrue(selector.isInternalSelector());
         }
     }
-    
+
     @Test
     public void testAutoclose() throws IOException {
-        SsdpSelector selectorRef = null;
+        SsdpSelector selectorRef;
         try (SsdpSelector selector = SsdpSelector.open()) {
             selectorRef = selector;
             assertTrue(selectorRef.isOpen());
