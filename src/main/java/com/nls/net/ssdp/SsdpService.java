@@ -91,27 +91,4 @@ public class SsdpService implements Closeable, AutoCloseable {
             }
         }
     }
-
-//    private static class MyHandler implements SsdpPacketListener {
-//        @Override
-//        public void received(SsdpPacket packet) {
-//            System.out.println(packet.getSocketAddress() + ", " + packet.getChannel() + ", " + packet.getMessage().getType());
-//
-//        }
-//    }
-//
-//    public static void main(String[] args) throws IOException, InterruptedException {
-//        try (SsdpService service = new SsdpService(Arrays.asList(NetworkInterface.getByName("net0")), new MyHandler())) {
-//            service.listen();
-//            while (true) {
-//                Thread.sleep(1000);
-//                try {
-//                    SsdpChannel channel = service.getChannels().get(0);
-//                    channel.send(new SsdpMessage(SsdpMessageType.RESPONSE));
-//                } catch (Exception e) {
-//                    System.out.println(e.getMessage());
-//                }
-//            }
-//        }
-//    }
 }
