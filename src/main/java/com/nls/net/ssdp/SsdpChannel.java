@@ -2,6 +2,7 @@ package com.nls.net.ssdp;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.net.Inet6Address;
 import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
 import java.net.SocketAddress;
@@ -12,10 +13,8 @@ import java.nio.channels.DatagramChannel;
 import java.util.List;
 
 public class SsdpChannel implements Closeable, AutoCloseable {
-    private static final InetSocketAddress SSDP_MCAST_ADDRESS = new InetSocketAddress(
-            "239.255.255.250",
-            1900);
 
+    private static final InetSocketAddress SSDP_MCAST_ADDRESS = new InetSocketAddress("239.255.255.250", 1900);
     private final DatagramChannel unicastChannel;
     private final DatagramChannel multicastChannel;
     private final SsdpSelector selector;
@@ -26,7 +25,8 @@ public class SsdpChannel implements Closeable, AutoCloseable {
 
     public SsdpChannel(NetworkInterface networkIf, SsdpSelector selector) throws IOException {
         this.selector = selector;
-        this.unicastChannel = createChannel(networkIf, new InetSocketAddress(networkIf.getInetAddresses().nextElement(), 0), selector);
+        this.unicastChannel = createChannel(networkIf,
+                new InetSocketAddress(networkIf.getInetAddresses().nextElement(), 0), selector);
         this.multicastChannel = createChannel(networkIf, new InetSocketAddress(SSDP_MCAST_ADDRESS.getPort()), selector);
     }
 
@@ -77,8 +77,7 @@ public class SsdpChannel implements Closeable, AutoCloseable {
     public String toString() {
         StringBuilder sb = new StringBuilder("SsdpChannel");
         try {
-            sb.append("[")
-                    .append(unicastChannel.getOption(StandardSocketOptions.IP_MULTICAST_IF).toString())
+            sb.append("[").append(unicastChannel.getOption(StandardSocketOptions.IP_MULTICAST_IF).toString())
                     .append("]");
         } catch (IOException ignore) {
             sb.append("[UnknownInterface]");
@@ -89,10 +88,12 @@ public class SsdpChannel implements Closeable, AutoCloseable {
 
     private DatagramChannel createChannel(NetworkInterface networkIf, InetSocketAddress address, SsdpSelector selector)
             throws IOException {
-        DatagramChannel channel = DatagramChannel.open(StandardProtocolFamily.INET)
-                .setOption(StandardSocketOptions.SO_REUSEADDR, true)
-                .bind(address)
-                .setOption(StandardSocketOptions.IP_MULTICAST_IF, networkIf);
+        StandardProtocolFamily proto = StandardProtocolFamily.INET;
+        if (address.getAddress() instanceof Inet6Address) {
+            proto = StandardProtocolFamily.INET6;
+        }
+        DatagramChannel channel = DatagramChannel.open(proto).setOption(StandardSocketOptions.SO_REUSEADDR, true)
+                .bind(address).setOption(StandardSocketOptions.IP_MULTICAST_IF, networkIf);
         channel.join(SSDP_MCAST_ADDRESS.getAddress(), networkIf);
         channel.configureBlocking(false);
         selector.register(this, channel);
